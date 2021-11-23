@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-      <form @submit.prevent="" class="search-box">
-          <input type="search" placeholder="Search shows">
-          <input type="submit" value="Search" class="btn">
-      </form>
+    <form @submit.prevent="searchMovies" class="search-box">
+      <input type="search" placeholder="Search shows" v-model="search" />
+      <input type="submit" value="Search" class="btn" />
+    </form>
     <div class="card-container">
-      <div class="feature-card" v-for="show in shows" :key="show">
-        <router-link to="/show/12345">
-          <img
-            src="https://static.posters.cz/image/750/poster/naruto-hokage-i30382.jpg"
-            alt=""
-          />
+      <div class="feature-card" v-for="show in shows" :key="show.imdbId">
+        <router-link :to="'/show/' + show.imdbId">
+          <div class="img-container" :style="'background-image: url('+show.Poster+')'">
+            <!-- <img :src="show.Poster" alt="" /> -->
+          </div>
           <div class="details">
-            <h3>Naruto</h3>
-            <p>Ninja Anime</p>
+            <h3>{{ show.Title }}</h3>
+            <p>{{ show.Year }}</p>
+            <p>{{ show.Type }}</p>
           </div>
         </router-link>
       </div>
@@ -22,11 +22,29 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import env from "@/env.js";
 export default {
   name: "Home",
-  data() {
+  setup() {
+    const search = ref("");
+    const shows = ref([]);
+
+    const searchMovies = () => {
+      if (search.value !== "") {
+        fetch(`https://www.omdbapi.com/?apiKey=${env.apiKey}&s=${search.value}`)
+          .then((res) => res.json())
+          .then((data) => {
+            shows.value = data.Search;
+            search.value = "";
+          });
+      }
+    };
+
     return {
-      shows: [1, 2, 3, 4, 5, 6, 7, 8],
+      search,
+      shows,
+      searchMovies,
     };
   },
 };
@@ -44,33 +62,49 @@ export default {
   overflow: hidden;
   background: #131313;
 }
-.feature-card img {
-  width: 100%;
+.feature-card .img-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 160px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
 .feature-card .details {
   padding: 10px;
   color: white;
 }
-.search-box{
-    padding-bottom: 20px;
-    display: flex;
-    align-items: center;
-    column-gap: 16px;
+.feature-card .details p {
+  margin-top: 6px;
+}
+.feature-card .details h3 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+}
+.search-box {
+  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  column-gap: 16px;
 }
 
-.search-box input{
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 16px;
-    border-radius: 2px;
-    outline: 0;
-    border: 0
+.search-box input {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 16px;
+  border-radius: 2px;
+  outline: 0;
+  border: 0;
 }
-.search-box .btn{
-    width: fit-content;
-    text-align: center;
-    cursor: pointer;
-    background: #42B883;
-    color: #fff;
+.search-box .btn {
+  width: fit-content;
+  text-align: center;
+  cursor: pointer;
+  background: #42b883;
+  color: #fff;
 }
 </style>
