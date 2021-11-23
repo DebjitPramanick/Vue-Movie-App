@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    <div class="header">
+      <router-link to="/">
+      <h1>Vue Movie App</h1>
+      </router-link>
+    </div>
     <router-view></router-view>
   </div>
 </template>
@@ -20,6 +25,32 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+  margin: 0 
+}
+
+body{
+  background: #000
+}
+.header{
+  background: #002850;
+  padding: 10px;
+}
+.header a{
+  color: #fff;
+}
+.container{
+  padding: 16px
 }
 </style>
