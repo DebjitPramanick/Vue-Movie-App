@@ -5,8 +5,8 @@
       <input type="submit" value="Search" class="btn" />
     </form>
     <div class="card-container">
-      <div class="feature-card" v-for="show in shows" :key="show.imdbId">
-        <router-link :to="'/show/' + show.imdbId">
+      <div class="feature-card" v-for="show in shows" :key="show.imdbID">
+        <router-link :to="'/show/' + show.imdbID">
           <div class="img-container" :style="'background-image: url('+show.Poster+')'">
             <!-- <img :src="show.Poster" alt="" /> -->
           </div>
